@@ -14,13 +14,25 @@ function addMessageToPage(msg) {
   messageArea.scrollTop = messageArea.scrollHeight;
 }
 
-// adding functionality to sendMessageBtn
-sendBtn.addEventListener('click', () => {
+// sendBtn triggerer while adding the message to the page
+function sendBtnTriggerer(){
   const message = messageInput.value;
   if (message.trim() === '') {
     alert("please enter a valid-MESSAGE");
   } else {
     const msg = message.trim();
     addMessageToPage(msg);
+  }
+}
+
+// adding functionality to sendMessageBtn
+sendBtn.addEventListener('click', () => {
+  sendBtnTriggerer();
+});
+
+// adding enterKey support to messageInput
+messageInput.addEventListener('keydown',(event)=>{
+  if(event.key === 'Enter'){
+    sendBtnTriggerer();
   }
 });
