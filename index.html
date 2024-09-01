@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>letChat</title>
     <link rel="stylesheet" href="tailWind.css" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="./styles/style.css" />
     <link
       rel="shortcut icon"
       href="./assets/letChat-favIcon.png"
@@ -18,9 +18,8 @@
       class="main h-screen w-screen bg-[url('https://w0.peakpx.com/wallpaper/818/148/HD-wallpaper-whatsapp-background-cool-dark-green-new-theme-whatsapp.jpg')] bg-center bg-contain flex flex-col"
     >
       <!-- Messages Area -->
-      <div class="overflow-y-scroll px-3 flex flex-col items-center gap-3 mt-4 pb-[9px] mb-[64px]">
+      <div class="js-message-area overflow-y-scroll px-3 flex flex-col items-center gap-3 mt-4 pb-[9px] mb-[64px]">
         <!-- Messages -->
-        <p class="bg-white leading-5 py-[6px] px-2 sm:w-[70%] rounded-lg">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo, explicabo exercitationem rerum tenetur recusandae laboriosam tempore expedita nihil ipsa, quam fugit neque laborum quisquam earum.</p>
         <p class="bg-white leading-5 py-[6px] px-2 sm:w-[70%] rounded-lg">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo, explicabo exercitationem rerum tenetur recusandae laboriosam tempore expedita nihil ipsa, quam fugit neque laborum quisquam earum.</p>
         <p class="bg-white leading-5 py-[6px] px-2 sm:w-[70%] rounded-lg">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo, explicabo exercitationem rerum tenetur recusandae laboriosam tempore expedita nihil ipsa, quam fugit neque laborum quisquam earum.</p>
         <p class="bg-white leading-5 py-[6px] px-2 sm:w-[70%] rounded-lg">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo, explicabo exercitationem rerum tenetur recusandae laboriosam tempore expedita nihil ipsa, quam fugit neque laborum quisquam earum.</p>
@@ -48,13 +47,13 @@
         <div class="w-[80%]">
           <input
             placeholder="send Message"
-            class="text-white placeholder-white h-11 w-full px-[18px] rounded-full message-input outline-none bg-[#457D70] border-[1px] border-white"
+            class="text-white placeholder-white h-11 w-full px-[18px] rounded-full message-input outline-none bg-[#457D70] border-[1px] border-white js-message-input"
             type="text"
           />
         </div>
         <!-- send-btn -->
         <div class="">
-          <div class="send-btn">
+          <div class="js-send-btn">
             <img
               class="h-[60px] cursor-pointer"
               src="./assets/send-btn.png"
@@ -67,6 +66,6 @@
 
     
 
-    <script src="app.js"></script>
+    <script src="./scripts/index.js"></script>
   </body>
 </html>
