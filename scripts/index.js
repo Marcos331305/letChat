@@ -1,3 +1,6 @@
+// import supabase-Client from the supaBase.js
+import { supabase } from "../scripts/supaBase.js";
+
 // fetching elements
 const messageInput = document.querySelector('.js-message-input');
 const sendBtn = document.querySelector('.js-send-btn');
@@ -36,3 +39,18 @@ messageInput.addEventListener('keydown',(event)=>{
     sendBtnTriggerer();
   }
 });
+
+async function fetchData() {
+  const { data, error } = await supabase
+      .from('students')
+      .select('*');
+
+  if (error) {
+      console.error('Error fetching data:', error);
+  } else {
+      console.log('Data:', data);
+  }
+}
+
+// Call the function to test
+fetchData();
