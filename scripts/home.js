@@ -1,7 +1,20 @@
 // import supabase-Client from the supaBase.js
-import { supabase } from "../scripts/supaBase.js";
+import { supabase } from "./supaBase.js";
+import { saveMessageToDatabase } from "./supaBase.js";
 
-import { saveMessageToDatabase } from "../scripts/supaBase.js";
+// Handling navbar Menu
+const menuBarToggler = document.querySelector('.js-menubar-toggler');
+const menuBar = document.querySelector('.js-menubar');
+menuBarToggler.addEventListener('click',()=>{
+  const icon = menuBarToggler.firstElementChild;
+  if(icon.name === 'reorder-four-outline'){
+    icon.name = 'close-outline';
+    menuBar.style.display = "flex";
+  } else {
+    icon.name = 'reorder-four-outline';
+    menuBar.style.display = "none";
+  }
+});
 
 // fetching elements
 const messageInput = document.querySelector('.js-message-input');

@@ -3,7 +3,7 @@ import { supabase } from "../scripts/supaBase.js";
 
 // fetching elements
 const userEmail = document.querySelector(".js-gmail-input");
-const userName = document.querySelector(".js-userName-letChat");
+const userNameInput = document.querySelector(".js-userName-letChat");
 const loginBtn = document.querySelector(".js-login-btn");
 const gmailArea = document.querySelector(".js-gmail-area");
 const userNameArea = document.querySelector(".js-userName-area");
@@ -22,7 +22,7 @@ function magicLinkSent(){
     if(errorPara){
         errorPara.remove();
     }
-    userNameArea.innerHTML += `<p class="success-para text-white mt-2 ml-5">magic-Link sent at provided Gmail.</p>`;
+    userNameArea.innerHTML += `<p class="success-para text-white mt-2 ml-5">signUp-Link sent at provided Gmail.</p>`;
 }
 
 // creating a function for sending the magic-link to appropriate gmail
@@ -52,10 +52,11 @@ function requiredInputs(){
 // adding loginBtn functionality
 loginBtn.addEventListener("click", () => {
   const email = userEmail.value;
-  if (email) {
+  const userName = userNameInput.value;
+  if (email && userName) {
     sendMagicLink(email);
   } else {
     // requiredInputs();
-    alert('please enter a gmail-FIRST !');
+    alert('please enter a gMail & userName -FIRST they are MUST !');
   }
 });
