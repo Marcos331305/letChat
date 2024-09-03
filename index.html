@@ -1,54 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>letChat</title>
-    <link rel="stylesheet" href="tailWind.css" />
-    <link rel="stylesheet" href="./styles/style.css" />
-    <link
-      rel="shortcut icon"
-      href="./assets/letChat-favIcon.png"
-      type="image/x-icon"
-    />
-  </head>
-  <body>
-    <!-- Main - container -->
-    <div
-      class="main h-screen w-screen bg-[url('https://w0.peakpx.com/wallpaper/818/148/HD-wallpaper-whatsapp-background-cool-dark-green-new-theme-whatsapp.jpg')] bg-center bg-contain flex flex-col"
-    >
-      <!-- Messages Area -->
-      <div class="js-message-area overflow-y-scroll px-3 flex flex-col items-center gap-3 mt-4 pb-[9px] mb-[64px]">
-        <!-- Messages -->
-      </div>
-
-      <!-- message-input & send btn -->
-      <div
-        class="pb-1 mt-auto flex gap-3 items-center justify-center pl-3 pr-2 fixed left-0 right-0 bottom-0 bg-[#457D70]"
-      >
-        <!-- message-input -->
-        <div class="w-[80%]">
-          <input
-            placeholder="send Message"
-            class="text-white placeholder-white h-11 w-full px-[18px] rounded-full message-input outline-none bg-[#457D70] border-[1px] border-white js-message-input"
-            type="text"
-          />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>letChat - @loGin</title>
+    <link rel="stylesheet" href="tailWind.css">
+</head>
+<body>
+    <!-- main-full screen -->
+    <div class="bg-[#447D6F] h-screen w-screen flex justify-center items-center">
+        <!-- login-card Container -->
+        <div class="w-screen flex justify-center">
+            <!-- Wrappper -->
+            <div class="flex flex-col gap-6 w-[85%] sm:w-[500px]">
+                <!-- gmail-input -->
+                <div class="js-gmail-area">
+                    <input type="text" class="js-gmail-input outline-none text-white placeholder-white h-11 w-full px-[18px] rounded-full  bg-[#457D70] border-[1px] border-white" placeholder="enter your Gmail">
+                </div>
+                <!-- username at letchat -->
+                <div class="js-userName-area">
+                    <input type="text" placeholder="userName at letChat" class="outline-none text-white placeholder-white js-userName-letChat h-11 w-full px-[18px] rounded-full  bg-[#457D70] border-[1px] border-white">
+                </div>
+                <div class="flex justify-center mt-2">
+                    <button class="text-white border-[1px] px-4 py-1 rounded-2xl js-login-btn">Login</button>
+                </div>
+            </div>
         </div>
-        <!-- send-btn -->
-        <div class="">
-          <div class="js-send-btn">
-            <img
-              class="h-[60px] cursor-pointer"
-              src="./assets/send-btn.png"
-              alt=""
-            />
-          </div>
-        </div>
-      </div>
     </div>
-
-    
-    <script type="module"  src="./scripts/index.js"></script>
-    <script type="module"  src="./scripts/supaBase.js"></script>
-  </body>
+    <script type="module" src="./scripts/login.js"></script>
+</body>
 </html>

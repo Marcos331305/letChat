@@ -1,10 +1,13 @@
 // import supabase-Client from the supaBase.js
 import { supabase } from "../scripts/supaBase.js";
 
+import { saveMessageToDatabase } from "../scripts/supaBase.js";
+
 // fetching elements
 const messageInput = document.querySelector('.js-message-input');
 const sendBtn = document.querySelector('.js-send-btn');
 const messageArea = document.querySelector('.js-message-area');
+const userNameArea = document.querySelector('.js-userName-area');
 
 // add MESSAGE to page
 function addMessageToPage(msg) {
@@ -24,7 +27,10 @@ function sendBtnTriggerer(){
     alert("please enter a valid-MESSAGE");
   } else {
     const msg = message.trim();
+    // display msg to webpage
     addMessageToPage(msg);
+    // save the msg into dB
+    saveMessageToDatabase(msg);
   }
 }
 
@@ -40,17 +46,15 @@ messageInput.addEventListener('keydown',(event)=>{
   }
 });
 
-async function fetchData() {
-  const { data, error } = await supabase
-      .from('students')
-      .select('*');
-
-  if (error) {
-      console.error('Error fetching data:', error);
-  } else {
-      console.log('Data:', data);
-  }
+// Create a function to handle inserts
+const handleInserts = (payload) => {
+  // console.log('Change received!', payload)
+  const msg = payload.new.message;
+  addMessageToPage(msg);
 }
 
-// Call the function to test
-fetchData();
+// Listen to inserts
+supabase
+  .channel('messages')
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, handleInserts)
+  .subscribe()
