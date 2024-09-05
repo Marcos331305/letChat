@@ -1,5 +1,5 @@
 // import supaBase-client from the supaBase.js
-import { supabase } from "../scripts/supaBase.js";
+import { supabase , creatingUserDb } from "../scripts/supaBase.js";
 
 // fetching elements
 const userEmail = document.querySelector(".js-gmail-input");
@@ -44,19 +44,14 @@ async function sendMagicLink(email) {
   }
 }
 
-function requiredInputs(){
-    gmailArea.innerHTML = `<p class="error-para text-black mt-2 ml-5">required !</p>`;
-    userNameArea.innerHTML = `<p class="success-para text-black mt-2 ml-5">required !</p>`;
-}
-
 // adding loginBtn functionality
 loginBtn.addEventListener("click", () => {
   const email = userEmail.value;
   const userName = userNameInput.value;
   if (email && userName) {
     sendMagicLink(email);
+    creatingUserDb(userName,email);
   } else {
-    // requiredInputs();
     alert('please enter a gMail & userName -FIRST they are MUST !');
   }
 });

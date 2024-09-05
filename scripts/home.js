@@ -1,6 +1,5 @@
 // import supabase-Client from the supaBase.js
 import { supabase } from "./supaBase.js";
-import { saveMessageToDatabase } from "./supaBase.js";
 
 // Handling navbar Menu
 const menuBarToggler = document.querySelector('.js-menubar-toggler');
@@ -58,16 +57,3 @@ messageInput.addEventListener('keydown',(event)=>{
     sendBtnTriggerer();
   }
 });
-
-// Create a function to handle inserts
-const handleInserts = (payload) => {
-  // console.log('Change received!', payload)
-  const msg = payload.new.message;
-  addMessageToPage(msg);
-}
-
-// Listen to inserts
-supabase
-  .channel('messages')
-  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, handleInserts)
-  .subscribe()
