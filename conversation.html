@@ -4,10 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>live Chat</title>
+    <link rel="stylesheet" href="tailWind.css">
 </head>
 <body>
+    <!-- Main - container -->
+    <div
+      class="main h-screen w-screen bg-[url('https://w0.peakpx.com/wallpaper/818/148/HD-wallpaper-whatsapp-background-cool-dark-green-new-theme-whatsapp.jpg')] bg-center bg-contain flex flex-col"
+    >
+      <!-- Navbar -->
+      <div
+        class="navbar relative flex items-center justify-between bg-[#447D6F] pb-1"
+      >
+      <!-- container -->
+        <div class="ml-2">
+          <!-- avatar & backArrow -->
+          <div class="flex items-center">
+            <!-- Back-Arrow -->
+            <div>
+                <a href="people.html">
+                    <img class="w-10" src="./assets/conversation-back-arrow.png" alt="arrow-icon">
+                </a>
+            </div>
+            <!-- avatar & userName -->
+            <div class="flex items-center ml-7">
+                <!-- avatar -->
+            <div>
+                <img
+              class="h-[48px] cursor-pointer"
+              src="./assets/avatar.png"
+              alt="Avatar-Logo"
+            />
+            </div>
+            <!-- userName -->
+            <div class="ml-4">
+                <p class="text-white text-2xl js-userName">userName</p>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <!-- Messages Area -->
+      <div
+        class="js-message-area overflow-y-scroll px-3 flex flex-col items-center gap-3 mt-4 pb-[9px] mb-[64px]"
+      >
+        <!-- Messages -->
+      </div>
 
-    <script src="conversation.js"></script>
+      <!-- message-input & send btn -->
+      <div
+        class="pb-1 mt-auto flex gap-3 items-center justify-center pl-3 pr-2 fixed left-0 right-0 bottom-0 bg-[#457D70]"
+      >
+        <!-- message-input -->
+        <div class="w-[80%]">
+          <input
+            placeholder="send Message"
+            class="text-white placeholder-white h-11 w-full px-[18px] rounded-full message-input outline-none bg-[#457D70] border-[1px] border-white js-message-input"
+            type="text"
+          />
+        </div>
+        <!-- send-btn -->
+        <div class="">
+          <div class="js-send-btn">
+            <img
+              class="h-[60px] cursor-pointer"
+              src="./assets/send-btn.png"
+              alt=""
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./scripts/conversation.js"></script>
 </body>
 </html>
