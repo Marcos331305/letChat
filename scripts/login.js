@@ -1,57 +1,53 @@
-// import supaBase-client from the supaBase.js
-import { supabase , creatingUserDb } from "../scripts/supaBase.js";
+// import supabase-Client from supaBase.js
+import { supabase } from "../scripts/supaBase.js";
 
 // fetching elements
-const userEmail = document.querySelector(".js-gmail-input");
 const userNameInput = document.querySelector(".js-userName-letChat");
+const userPasswordInput = document.querySelector(".js-userPassword-letChat");
 const loginBtn = document.querySelector(".js-login-btn");
-const gmailArea = document.querySelector(".js-gmail-area");
-const userNameArea = document.querySelector(".js-userName-area");
+const interactionArea = document.querySelector(".js-interaction-area");
 
-// error handling
-function handlingClientError() {
-    gmailArea.innerHTML += `<p class="error-para text-black mt-2 ml-5">please enter a valid Gmail.</p>`;
-}
-function handlingOtherErrors(){
-
+// removeErrorMessage from interaction-area after 3 seconds
+function removeErrorMsg(){
+    const msg = interactionArea.querySelector('.interaction-area-msg');
+    msg.remove();
 }
 
-// if magicLink Sent Successfully
-function magicLinkSent(){
-    const errorPara = gmailArea.querySelector('.error-para');
-    if(errorPara){
-        errorPara.remove();
-    }
-    userNameArea.innerHTML += `<p class="success-para text-white mt-2 ml-5">signUp-Link sent at provided Gmail.</p>`;
-}
-
-// creating a function for sending the magic-link to appropriate gmail
-async function sendMagicLink(email) {
-  const { error } = await supabase.auth.signInWithOtp({
-    email: email,
-    options: {
-      expiresIn: 120,
-    },
-  });
-  if (error) {
-    if(error.status === 400){
-        handlingClientError();
-    } else{
-        handlingOtherErrors();
-    }
-  } else{
-    magicLinkSent();
+// userAuthentication
+function userAuthentication(userData, password) {
+  if (password === userData.password) {
+    window.location.href = "./home.html";
+  } else {
+    interactionArea.innerHTML = `<p class="text-white ml-5 interaction-area-msg">Invalid userName or Password ☹️</P>`;
+    setTimeout(removeErrorMsg,3000);
   }
 }
 
-// adding loginBtn functionality
-loginBtn.addEventListener("click", () => {
-  const email = userEmail.value;
-  const userName = userNameInput.value;
-  if (email && userName) {
-    sendMagicLink(email);
-    creatingUserDb(userName,email);
+// fetch usersData from dB
+async function fetchUserData(userName, password) {
+  let userData;
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("userName", userName)
+    .single();
+  userData = data;
+  if (userData) {
+    userAuthentication(userData, password);
   } else {
-    alert('please enter a gMail & userName -FIRST they are MUST !');
+    interactionArea.innerHTML = `<p class="text-white ml-5 interaction-area-msg">Invalid userName or Password ☹️</P>`;
+    setTimeout(removeErrorMsg,3000);
+  }
+}
+// fetchUserData();
+
+// adding loginBtn functionality
+loginBtn.addEventListener("click", (e) => {
+  const userName = userNameInput.value;
+  const password = userPasswordInput.value;
+  if (userName && password) {
+    fetchUserData(userName, password);
+  } else {
+    alert("please privide details First !");
   }
 });

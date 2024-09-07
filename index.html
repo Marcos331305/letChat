@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>letChat - @loGin</title>
+    <title>letChat - @signUp</title>
     <link rel="stylesheet" href="tailWind.css">
 </head>
 <body>
@@ -13,6 +13,8 @@
         <div class="w-screen flex justify-center">
             <!-- Wrappper -->
             <div class="flex flex-col gap-6 w-[85%] sm:w-[500px]">
+                <!-- Interaction area -->
+                <div class="js-interaction-area"></div>
                 <!-- gmail-input -->
                 <div class="js-gmail-area">
                     <input type="text" class="js-gmail-input outline-none text-white placeholder-white h-11 w-full px-[18px] rounded-full  bg-[#457D70] border-[1px] border-white" placeholder="enter your Gmail">
@@ -21,12 +23,21 @@
                 <div class="js-userName-area">
                     <input type="text" placeholder="userName at letChat" class="outline-none text-white placeholder-white js-userName-letChat h-11 w-full px-[18px] rounded-full  bg-[#457D70] border-[1px] border-white">
                 </div>
-                <div class="flex justify-center mt-2">
+                <!-- password at letchat -->
+                <div class="js-password-area">
+                    <input type="text" placeholder="password for letChat" class="js-userPassword-letChat outline-none text-white placeholder-white js-userName-letChat h-11 w-full px-[18px] rounded-full  bg-[#457D70] border-[1px] border-white">
+                </div>
+                <!-- loginPara -->
+                <div class="ml-5">
+                    <p class="text-white js-login-para pr-5">If you already have a letChat account <a class="font-mono underline" href="login.html">login</a> .</p>
+                </div>
+                <!-- singUp Btn -->
+                <div class="flex justify-center">
                     <button class="text-white border-[1px] px-4 py-1 rounded-2xl js-login-btn">signUp</button>
                 </div>
             </div>
         </div>
     </div>
-    <script type="module" src="./scripts/login.js"></script>
+    <script type="module" src="./scripts/signUp.js"></script>
 </body>
 </html>

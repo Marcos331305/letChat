@@ -18,8 +18,8 @@ function generateUniqueId() {
 }
 
 // Creating user with the provided gmail & userName in the dB
-export async function creatingUserDb(userName, userEmail) {
+export async function creatingUserDb(userName, userEmail, userPassword) {
   const { error } = await supabase
     .from("users")
-    .insert({ id: generateUniqueId(), username: userName, email: userEmail });
+    .insert({ id: generateUniqueId(), userName: userName, email: userEmail, password: userPassword });
 }

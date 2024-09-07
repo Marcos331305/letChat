@@ -8,7 +8,7 @@ const people = document.querySelector(".js-people");
 function peopleHTML(users) {
   let html = ``;
   users.forEach((user) => {
-    const userName = user.username;
+    const userName = user.userName;
     html += `
                     <!-- person -->
                     <div class="flex justify-between border-b-[1px] px-4 py-1 js-person">
@@ -36,13 +36,13 @@ function peopleHTML(users) {
 }
 
 // fetching users from the dB
-async function fetchUsersFromDb() {
-  const { data, error } = await supabase.from("users").select("username");
+export async function fetchUsersFromDb() {
+  const { data, error } = await supabase.from("users").select("userName");
   if (data) {
     const users = data;
     peopleHTML(users);
   } else {
-    people.textContent = "Server not Respond !";
+    people.textContent = `Server not Respond , error is -> ${error}`;
   }
 }
 fetchUsersFromDb();
