@@ -10,7 +10,7 @@ const supabaseAnonKey =
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // dataBase Interaction
-function generateUniqueId() {
+export function generateUniqueId() {
   const timeStamp = Date.now();
   const randomNumber = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
   const uniMsgId = `${timeStamp}` + `${randomNumber}`;

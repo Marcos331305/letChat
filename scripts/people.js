@@ -37,9 +37,10 @@ function peopleHTML(users) {
 
 // fetching users from the dB
 export async function fetchUsersFromDb() {
-  const { data, error } = await supabase.from("users").select("userName");
+  const { data, error } = await supabase.from("users").select("*");
   if (data) {
     const users = data;
+    localStorage.setItem('receiverUserId',users[0].id)
     peopleHTML(users);
   } else {
     people.textContent = `Server not Respond , error is -> ${error}`;

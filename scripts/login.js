@@ -8,9 +8,9 @@ const loginBtn = document.querySelector(".js-login-btn");
 const interactionArea = document.querySelector(".js-interaction-area");
 
 // removeErrorMessage from interaction-area after 3 seconds
-function removeErrorMsg(){
-    const msg = interactionArea.querySelector('.interaction-area-msg');
-    msg.remove();
+function removeErrorMsg() {
+  const msg = interactionArea.querySelector(".interaction-area-msg");
+  msg.remove();
 }
 
 // userAuthentication
@@ -19,7 +19,7 @@ function userAuthentication(userData, password) {
     window.location.href = "./home.html";
   } else {
     interactionArea.innerHTML = `<p class="text-white ml-5 interaction-area-msg">Invalid userName or Password ☹️</P>`;
-    setTimeout(removeErrorMsg,3000);
+    setTimeout(removeErrorMsg, 3000);
   }
 }
 
@@ -32,22 +32,25 @@ async function fetchUserData(userName, password) {
     .eq("userName", userName)
     .single();
   userData = data;
+  const currentUserId = userData.id;
+  localStorage.setItem('currentUserId',currentUserId);
   if (userData) {
     userAuthentication(userData, password);
   } else {
     interactionArea.innerHTML = `<p class="text-white ml-5 interaction-area-msg">Invalid userName or Password ☹️</P>`;
-    setTimeout(removeErrorMsg,3000);
+    setTimeout(removeErrorMsg, 3000);
   }
 }
-// fetchUserData();
 
 // adding loginBtn functionality
-loginBtn.addEventListener("click", (e) => {
-  const userName = userNameInput.value;
-  const password = userPasswordInput.value;
-  if (userName && password) {
-    fetchUserData(userName, password);
-  } else {
-    alert("please privide details First !");
-  }
-});
+if(loginBtn){
+  loginBtn.addEventListener("click", (e) => {
+    const userName = userNameInput.value;
+    const password = userPasswordInput.value;
+    if (userName && password) {
+      fetchUserData(userName, password);
+    } else {
+      alert("please privide details First !");
+    }
+  });
+}
