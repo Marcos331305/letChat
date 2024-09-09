@@ -15,7 +15,7 @@ function peopleHTML(users) {
                     <!-- person -->
                     <div class="flex justify-between border-b-[1px] px-4 py-1 js-person">
                     <!-- Avatar & userName -->
-                    <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-2">
                         <div>
                         <img
                             class="h-[48px] cursor-pointer"
@@ -29,7 +29,7 @@ function peopleHTML(users) {
                     </div>
                     <!-- message-icon -->
                     <div>
-                        <img class="h-[48px] cursor-pointer js-chat-btn" src="./assets/chat-icon.png" alt="chat-icon">
+                        <img class="h-[48px] cursor-pointer js-chat-btn" src="./assets/chat-button.png" alt="chat-icon">
                     </div>
                     </div>
                 `;

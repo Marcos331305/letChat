@@ -753,6 +753,18 @@ video {
   margin-top: auto;
 }
 
+.mt-\[55px\] {
+  margin-top: 55px;
+}
+
+.mt-\[59px\] {
+  margin-top: 59px;
+}
+
+.ml-1 {
+  margin-left: 0.25rem;
+}
+
 .block {
   display: block;
 }
@@ -1045,11 +1057,6 @@ video {
   border-top-width: 1px;
 }
 
-.border-\[\#8BB7F0\] {
-  --tw-border-opacity: 1;
-  border-color: rgb(139 183 240 / var(--tw-border-opacity));
-}
-
 .border-black {
   --tw-border-opacity: 1;
   border-color: rgb(0 0 0 / var(--tw-border-opacity));
@@ -1155,6 +1162,10 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.bg-\[\] {
+  background-color: ;
+}
+
 .bg-\[url\(\'https\:\/\/w0\.peakpx\.com\/wallpaper\/818\/148\/HD-wallpaper-whatsapp-background-cool-dark-green-new-theme-whatsapp\.jpg\'\)\] {
   background-image: url('https://w0.peakpx.com/wallpaper/818/148/HD-wallpaper-whatsapp-background-cool-dark-green-new-theme-whatsapp.jpg');
 }
@@ -1185,6 +1196,14 @@ video {
 
 .p-5 {
   padding: 1.25rem;
+}
+
+.p-\[3px\] {
+  padding: 3px;
+}
+
+.p-\[5px\] {
+  padding: 5px;
 }
 
 .px-2 {
@@ -1307,10 +1326,6 @@ video {
 
 .text-\[26px\] {
   font-size: 26px;
-}
-
-.text-\[50px\] {
-  font-size: 50px;
 }
 
 .text-lg {

@@ -27,10 +27,6 @@ function addMessageToPage(msg) {
 // Id's of user-1(msgSender) & user-2(msgReceiver)
 const user1_id = parseInt(localStorage.getItem("currentUserId"));
 const user2_id = parseInt(localStorage.getItem("receiverUserId"));
-console.log(user1_id);
-console.log(user2_id);
-
-
 
 // adding messages in messages-Table
 async function addingMessagesToDb(conversation_id, user1_id, message) {
@@ -152,7 +148,7 @@ async function chekingConversatioForMessages(){
     fetchingMessages(existingConversation.id);
   } else {
     // if no conversaton exists then display -> Start a new Conversation message in chat window
-    
+    // messageArea.innerHTML = '<p class="bg-white text-center leading-5 py-3 px-3 w-1/2 rounded-lg">Start a new Conversation</p>';
   }
 }
 chekingConversatioForMessages();
