@@ -40,7 +40,6 @@ export async function fetchUsersFromDb() {
   const { data, error } = await supabase.from("users").select("*");
   if (data) {
     const users = data;
-    localStorage.setItem('receiverUserId',users[0].id)
     peopleHTML(users);
   } else {
     people.textContent = `Server not Respond , error is -> ${error}`;
@@ -48,12 +47,38 @@ export async function fetchUsersFromDb() {
 }
 fetchUsersFromDb();
 
-// adding functionality to chat-Btn
-document.addEventListener('click',(event) => {
-    if (event.target.classList.contains('js-chat-btn')) {
-        const person = event.target.closest('.js-person');
-        const personUsername = person.querySelector('.js-person-username').innerText;
-        localStorage.setItem('personUsername',personUsername);
-        window.location.href = '/conversation.html';
+async function fetchUsers() {
+  const { data, error } = await supabase.from("users").select("*");
+  if (data) {
+    const users = data;
+    return users;
+  }
+}
+const users = await fetchUsers();
+
+// find the user2id based on receiverUserName
+function findReceiverUserId(receiverUserName) {
+  let matchingUser = null;
+  users.forEach((user) => {
+    if (receiverUserName === user.userName) {
+      matchingUser = user;
     }
+  });
+  const receiverUserId = matchingUser.id;
+  return receiverUserId;
+}
+
+// adding functionality to chat-Btn
+document.addEventListener("click", (event) => {
+  if (event.target.classList.contains("js-chat-btn")) {
+    const person = event.target.closest(".js-person");
+    const receiverUserName = person.querySelector(
+      ".js-person-username"
+    ).innerText;
+    localStorage.setItem("receiverUserName", receiverUserName);
+    const receiverUserId = findReceiverUserId(receiverUserName);
+    console.log(receiverUserId);
+    localStorage.setItem("receiverUserId",receiverUserId);
+    window.location.href = "/conversation.html";
+  }
 });

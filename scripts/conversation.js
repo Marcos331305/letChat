@@ -11,7 +11,7 @@ const messageArea = document.querySelector(".js-message-area");
 const userNameArea = document.querySelector(".js-userName-area");
 
 // getting personUserName from localStorage and display on page
-userName.textContent = localStorage.getItem("personUsername");
+userName.textContent = localStorage.getItem("receiverUserName");
 
 // add MESSAGE to page
 function addMessageToPage(msg) {
@@ -24,6 +24,73 @@ function addMessageToPage(msg) {
   messageArea.scrollTop = messageArea.scrollHeight;
 }
 
+// Id's of user-1(msgSender) & user-2(msgReceiver)
+const user1_id = parseInt(localStorage.getItem("currentUserId"));
+const user2_id = parseInt(localStorage.getItem("receiverUserId"));
+console.log(user1_id);
+console.log(user2_id);
+
+
+
+// adding messages in messages-Table
+async function addingMessagesToDb(conversation_id, user1_id, message) {
+  const { error } = await supabase
+    .from("messages")
+    .insert({
+      id: generateUniqueId(),
+      conversation_id: conversation_id,
+      sender_id: user1_id,
+      message: message,
+    });
+}
+
+// creating a conversation if already don't exits for two users when they start chatting
+async function createConversation(user1_id, user2_id, msg) {
+  const { data, error } = await supabase
+    .from("conversations")
+    .insert({ id: generateUniqueId(), user1_id: user1_id, user2_id: user2_id })
+    .select();
+  if (data) {
+    const conversation_id = data[0]?.id;
+    addingMessagesToDb(conversation_id, user1_id, msg);
+  } else{
+    console.log("Error : ",error);
+  }
+}
+
+// fetchConversations for cheking an existing conversation
+async function fetchConversations() {
+  const { data, error } = await supabase.from("conversations").select("*");
+  if (data) {
+    return data;
+  }
+}
+
+// checking if a conversation exists or not between two users
+async function checkingConversationExistance(msg) {
+  const conversations = await fetchConversations();
+  let existingConversation = null;
+  // checking if conversation exists between user1 and user2
+  conversations.forEach((conversation) => {
+    const currentUserId = conversation.user1_id;
+    const otherUserId = conversation.user2_id;
+    // chekign if conversation exists between user1 and user2 < or > user2 and user1
+    if (
+      (user1_id === currentUserId && user2_id === otherUserId) ||
+      (user1_id === otherUserId && user2_id === currentUserId)
+    ) {
+      existingConversation = conversation;
+    }
+  });
+  if (existingConversation) {
+    // if a conversation exists then add a new message to it
+    addingMessagesToDb(existingConversation.id, user1_id, msg);
+  } else {
+    // if no conversaton exists then create a new one
+    createConversation(user1_id, user2_id, msg);
+  }
+}
+
 // sendBtn triggerer while adding the message to the page
 function sendBtnTriggerer() {
   const message = messageInput.value;
@@ -33,8 +100,8 @@ function sendBtnTriggerer() {
     const msg = message.trim();
     // display msg to webpage
     addMessageToPage(msg);
-    //   one to one chat
-  checkingConversationExistance(msg);
+    // for one-to-one chat
+    checkingConversationExistance(msg);
   }
 }
 
@@ -50,50 +117,42 @@ messageInput.addEventListener("keydown", (event) => {
   }
 });
 
-// fetchConversations for cheking an existing conversation
-async function fetchConversations() {
-  const { data, error } = await supabase.from("conversations").select("*");
-  if (data) {
-    return data;
+// fetching messages associated with a conversation & displaying them in the chat-Window
+async function fetchingMessages(conversation_id){
+  const { data, error } = await supabase
+  .from('messages')
+  .select('message')
+  .eq('conversation_id',conversation_id);
+  if(data){
+    data.forEach((msg)=>{
+      addMessageToPage(msg.message);
+    });
+  } else{
+    console.log("Error : ",error);
   }
 }
 
-// Id's of user-1(msgSender) & user-2(msgReceiver)
-const user1_id = parseInt(localStorage.getItem("currentUserId"));
-const user2_id = parseInt(localStorage.getItem("receiverUserId"));
-
-// creating a conversation if already don't exits for two users when they start chatting
-async function createConversation(msg) {
-  const { data,error } = await supabase
-    .from("conversations")
-    .insert({ id: generateUniqueId(), user1_id: user1_id, user2_id: user2_id })
-    .select();
-    const conversation_id = data[0]?.id;
-    addingMessagesToDb(conversation_id,msg)
-}
-
-// checking if a conversation exists or not between two users
-async function checkingConversationExistance(msg) {
+async function chekingConversatioForMessages(){
   const conversations = await fetchConversations();
+  let existingConversation = null;
+  // checking if conversation exists between user1 and user2
   conversations.forEach((conversation) => {
     const currentUserId = conversation.user1_id;
     const otherUserId = conversation.user2_id;
-    // cheking if a conversation between these two users already exists
-    if (user1_id === currentUserId && user2_id === otherUserId) {
-        const conversation_id = conversation.id;
-        addingMessagesToDb(conversation_id,msg);
-    } else if (user1_id === otherUserId && user2_id === currentUserId) {
-        const conversation_id = conversation.id;
-        addingMessagesToDb(conversation_id,msg);
-    } else {
-      createConversation(msg);
+    // chekign if conversation exists between user1 and user2 < or > user2 and user1
+    if (
+      (user1_id === currentUserId && user2_id === otherUserId) ||
+      (user1_id === otherUserId && user2_id === currentUserId)
+    ) {
+      existingConversation = conversation;
     }
   });
+  if (existingConversation) {
+    // if a conversation exists then fetch the messages related to it
+    fetchingMessages(existingConversation.id);
+  } else {
+    // if no conversaton exists then display -> Start a new Conversation message in chat window
+    
+  }
 }
-
-// adding messages in messages-Table
-async function addingMessagesToDb(conversation_id,message) {
-  const { error } = await supabase
-    .from("messages")
-    .insert({ id: generateUniqueId(), conversation_id: conversation_id, sender_id: user1_id, message: message });
-}
+chekingConversatioForMessages();
