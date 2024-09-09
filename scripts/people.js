@@ -6,10 +6,12 @@ const people = document.querySelector(".js-people");
 
 // generating HTML for the people
 function peopleHTML(users) {
+  const currentUserId = parseInt(localStorage.getItem("currentUserId"));
   let html = ``;
   users.forEach((user) => {
-    const userName = user.userName;
-    html += `
+    if (currentUserId !== user.id) {
+      const userName = user.userName;
+      html += `
                     <!-- person -->
                     <div class="flex justify-between border-b-[1px] px-4 py-1 js-person">
                     <!-- Avatar & userName -->
@@ -31,6 +33,7 @@ function peopleHTML(users) {
                     </div>
                     </div>
                 `;
+    }
   });
   people.innerHTML = html;
 }
@@ -78,7 +81,7 @@ document.addEventListener("click", (event) => {
     localStorage.setItem("receiverUserName", receiverUserName);
     const receiverUserId = findReceiverUserId(receiverUserName);
     console.log(receiverUserId);
-    localStorage.setItem("receiverUserId",receiverUserId);
+    localStorage.setItem("receiverUserId", receiverUserId);
     window.location.href = "/conversation.html";
   }
 });
