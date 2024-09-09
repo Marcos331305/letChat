@@ -152,3 +152,18 @@ async function chekingConversatioForMessages(){
   }
 }
 chekingConversatioForMessages();
+
+// get current conversation_id
+
+
+// Create a function to handle inserts
+const handleInserts = (payload) => {
+  const msg = payload.new.message;
+  addMessageToPage(msg);
+}
+
+// Listen to inserts
+supabase
+  .channel('messages')
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, handleInserts)
+  .subscribe()
