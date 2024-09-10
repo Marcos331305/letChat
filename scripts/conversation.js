@@ -30,14 +30,12 @@ const user2_id = parseInt(localStorage.getItem("receiverUserId"));
 
 // adding messages in messages-Table
 async function addingMessagesToDb(conversation_id, user1_id, message) {
-  const { error } = await supabase
-    .from("messages")
-    .insert({
-      id: generateUniqueId(),
-      conversation_id: conversation_id,
-      sender_id: user1_id,
-      message: message,
-    });
+  const { error } = await supabase.from("messages").insert({
+    id: generateUniqueId(),
+    conversation_id: conversation_id,
+    sender_id: user1_id,
+    message: message,
+  });
 }
 
 // creating a conversation if already don't exits for two users when they start chatting
@@ -49,8 +47,8 @@ async function createConversation(user1_id, user2_id, msg) {
   if (data) {
     const conversation_id = data[0]?.id;
     addingMessagesToDb(conversation_id, user1_id, msg);
-  } else{
-    console.log("Error : ",error);
+  } else {
+    console.log("Error : ", error);
   }
 }
 
@@ -114,21 +112,21 @@ messageInput.addEventListener("keydown", (event) => {
 });
 
 // fetching messages associated with a conversation & displaying them in the chat-Window
-async function fetchingMessages(conversation_id){
+async function fetchingMessages(conversation_id) {
   const { data, error } = await supabase
-  .from('messages')
-  .select('message')
-  .eq('conversation_id',conversation_id);
-  if(data){
-    data.forEach((msg)=>{
+    .from("messages")
+    .select("message")
+    .eq("conversation_id", conversation_id);
+  if (data) {
+    data.forEach((msg) => {
       addMessageToPage(msg.message);
     });
-  } else{
-    console.log("Error : ",error);
+  } else {
+    console.log("Error : ", error);
   }
 }
 
-async function chekingConversatioForMessages(){
+async function chekingConversatioForMessages() {
   const conversations = await fetchConversations();
   let existingConversation = null;
   // checking if conversation exists between user1 and user2
@@ -155,15 +153,23 @@ chekingConversatioForMessages();
 
 // get current conversation_id
 
-
 // Create a function to handle inserts
 const handleInserts = (payload) => {
-  const msg = payload.new.message;
-  addMessageToPage(msg);
-}
+  const currentUserId = parseInt(localStorage.getItem("currentUserid"));
+  const sender_id = payload.new.sender_id;
+  // Ensuring that msg not duplicates in sender's-Chat-Window
+  if (currentUserId !== sender_id) {
+    const msg = payload.new.message;
+    addMessageToPage(msg);
+  }
+};
 
 // Listen to inserts
 supabase
-  .channel('messages')
-  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, handleInserts)
-  .subscribe()
+  .channel("messages")
+  .on(
+    "postgres_changes",
+    { event: "INSERT", schema: "public", table: "messages" },
+    handleInserts
+  )
+  .subscribe();
