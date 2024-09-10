@@ -3,6 +3,9 @@ import { supabase } from "../scripts/supaBase.js";
 // other imports
 import { generateUniqueId } from "../scripts/supaBase.js";
 
+// Global Variables
+let globalCurrentConversationId = null;
+
 // fetching elements
 const userName = document.querySelector(".js-userName");
 const messageInput = document.querySelector(".js-message-input");
@@ -47,8 +50,12 @@ async function createConversation(user1_id, user2_id, msg) {
   if (data) {
     const conversation_id = data[0]?.id;
     addingMessagesToDb(conversation_id, user1_id, msg);
+    // return the currentConversationId
+    let currentConversationId = conversation_id;
+    return currentConversationId;
   } else {
     console.log("Error : ", error);
+    return null;
   }
 }
 
@@ -76,17 +83,20 @@ async function checkingConversationExistance(msg) {
       existingConversation = conversation;
     }
   });
+  let currentConversationId;
   if (existingConversation) {
-    // if a conversation exists then add a new message to it
+    // if a conversation exists then add a new message to it & use its Conversation_id
+    currentConversationId = existingConversation.id;
     addingMessagesToDb(existingConversation.id, user1_id, msg);
   } else {
-    // if no conversaton exists then create a new one
-    createConversation(user1_id, user2_id, msg);
+    // if no conversaton exists then create a new one & also gets the convesation_id of the newly created conversation
+    currentConversationId = await createConversation(user1_id, user2_id, msg);
   }
+  return currentConversationId;
 }
 
 // sendBtn triggerer while adding the message to the page
-function sendBtnTriggerer() {
+async function sendBtnTriggerer() {
   const message = messageInput.value;
   if (message.trim() === "") {
     alert("please enter a valid-MESSAGE");
@@ -95,7 +105,8 @@ function sendBtnTriggerer() {
     // display msg to webpage
     addMessageToPage(msg);
     // for one-to-one chat
-    checkingConversationExistance(msg);
+    let currentConversationId = await checkingConversationExistance(msg);
+    globalCurrentConversationId = currentConversationId;
   }
 }
 
@@ -153,7 +164,7 @@ chekingConversatioForMessages();
 
 // get current conversation_id
 
-// Create a function to handle inserts
+// Create a function to handle realtime-inserts
 const handleInserts = (payload) => {
   const currentUserId = parseInt(localStorage.getItem("currentUserid"));
   const sender_id = payload.new.sender_id;
@@ -164,12 +175,19 @@ const handleInserts = (payload) => {
   }
 };
 
-// Listen to inserts
+/*
+ Listen to inserts new messages in message-Table but only filter the messages related to the conversation_id of current chat window. so that messages not added in other users chat-Window's in real-time , when the app is used by multiple users simultaneously. 
+*/
 supabase
   .channel("messages")
   .on(
     "postgres_changes",
-    { event: "INSERT", schema: "public", table: "messages" },
+    { 
+      event: "INSERT",
+      schema: "public",
+      table: "messages",
+      filter: `conversation_id=eq.${globalCurrentConversationId}`
+    },
     handleInserts
   )
   .subscribe();
