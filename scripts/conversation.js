@@ -3,6 +3,9 @@ import { supabase } from "../scripts/supaBase.js";
 // other imports
 import { generateUniqueId } from "../scripts/supaBase.js";
 
+// globaly available variables
+let subscription = null;
+
 // fetching elements
 const userName = document.querySelector(".js-userName");
 const messageInput = document.querySelector(".js-message-input");
@@ -106,15 +109,15 @@ const handleInserts = (payload) => {
 function startRealTimeSubscription(currentConversationId) {
   // Unsubscribe from the previous subscription (if any) to avoid duplicates
   if(subscription){
-    subscription.removeChannel(subscription);
+    subscription.unsubscribe();
   }
-/*
- Listen to inserts new messages in message-Table but only filter the messages related to the
- conversation_id of current chat window. so that messages not added in other users chat-Window's
- in real-time , when the app is used by multiple users simultaneously.
- And only subscribe when firtly the globalCurrentConversationId is FETHCED.
-*/
-  let subscription = supabase
+  /*
+  Listen to inserts new messages in message-Table but only filter the messages related to the
+  conversation_id of current chat window. so that messages not added in other users chat-Window's
+  in real-time , when the app is used by multiple users simultaneously.
+  And only subscribe when firtly the globalCurrentConversationId is FETHCED.
+  */
+  subscription = supabase
     .channel("messages")
     .on(
       "postgres_changes",
@@ -140,7 +143,6 @@ async function sendBtnTriggerer() {
     addMessageToPage(msg);
     // for one-to-one chat
     let currentConversationId = await checkingConversationExistance(msg);
-    console.log(currentConversationId);
     if (currentConversationId) {
       // if currentConversationId is available then only start listening for messages in real-Time
       startRealTimeSubscription(currentConversationId);
