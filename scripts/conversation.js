@@ -3,9 +3,6 @@ import { supabase } from "../scripts/supaBase.js";
 // other imports
 import { generateUniqueId } from "../scripts/supaBase.js";
 
-// Global Variables
-let globalCurrentConversationId = null;
-
 // fetching elements
 const userName = document.querySelector(".js-userName");
 const messageInput = document.querySelector(".js-message-input");
@@ -95,6 +92,43 @@ async function checkingConversationExistance(msg) {
   return currentConversationId;
 }
 
+// Create a function to handle realtime-inserts
+const handleInserts = (payload) => {
+  const currentUserId = parseInt(localStorage.getItem("currentUserid"));
+  const sender_id = payload.new.sender_id;
+  // Ensuring that msg not duplicates in sender's-Chat-Window
+  if (currentUserId !== sender_id) {
+    const msg = payload.new.message;
+    addMessageToPage(msg);
+  }
+};
+
+function startRealTimeSubscription(currentConversationId) {
+  // Unsubscribe from the previous subscription (if any) to avoid duplicates
+  if(subscription){
+    subscription.removeChannel(subscription);
+  }
+/*
+ Listen to inserts new messages in message-Table but only filter the messages related to the
+ conversation_id of current chat window. so that messages not added in other users chat-Window's
+ in real-time , when the app is used by multiple users simultaneously.
+ And only subscribe when firtly the globalCurrentConversationId is FETHCED.
+*/
+  let subscription = supabase
+    .channel("messages")
+    .on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "messages",
+        filter: `conversation_id=eq.${currentConversationId}`,
+      },
+      handleInserts
+    )
+    .subscribe();
+}
+
 // sendBtn triggerer while adding the message to the page
 async function sendBtnTriggerer() {
   const message = messageInput.value;
@@ -106,7 +140,11 @@ async function sendBtnTriggerer() {
     addMessageToPage(msg);
     // for one-to-one chat
     let currentConversationId = await checkingConversationExistance(msg);
-    globalCurrentConversationId = currentConversationId;
+    console.log(currentConversationId);
+    if (currentConversationId) {
+      // if currentConversationId is available then only start listening for messages in real-Time
+      startRealTimeSubscription(currentConversationId);
+    }
   }
 }
 
@@ -161,33 +199,3 @@ async function chekingConversatioForMessages() {
   }
 }
 chekingConversatioForMessages();
-
-// get current conversation_id
-
-// Create a function to handle realtime-inserts
-const handleInserts = (payload) => {
-  const currentUserId = parseInt(localStorage.getItem("currentUserid"));
-  const sender_id = payload.new.sender_id;
-  // Ensuring that msg not duplicates in sender's-Chat-Window
-  if (currentUserId !== sender_id) {
-    const msg = payload.new.message;
-    addMessageToPage(msg);
-  }
-};
-
-/*
- Listen to inserts new messages in message-Table but only filter the messages related to the conversation_id of current chat window. so that messages not added in other users chat-Window's in real-time , when the app is used by multiple users simultaneously. 
-*/
-supabase
-  .channel("messages")
-  .on(
-    "postgres_changes",
-    { 
-      event: "INSERT",
-      schema: "public",
-      table: "messages",
-      filter: `conversation_id=eq.${globalCurrentConversationId}`
-    },
-    handleInserts
-  )
-  .subscribe();
